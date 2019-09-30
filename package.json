@@ -1,0 +1,23 @@
+{
+  "name": "population-manager",
+  "version": "1.0.0",
+  "description": "population manager",
+  "main": "src/index.js",
+  "repository": "https://github.com/njeri-ngigi/population-manager.git",
+  "author": "Njeri Ngigi",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev:start": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "^1.19.3"
+  }
+}
