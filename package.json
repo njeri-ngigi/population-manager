@@ -8,7 +8,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev:start": "nodemon index.js"
+    "dev:start": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
   "dependencies": {
     "dotenv": "^8.1.0",
