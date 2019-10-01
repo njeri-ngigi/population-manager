@@ -1,4 +1,4 @@
-const { insertOne, findOne } = require('../models/location');
+const { insertOne, findOne, findAll } = require('../models/location');
 
 module.exports = {
   createLocation: async (req, res) => {
@@ -18,10 +18,9 @@ module.exports = {
     return res.status(200).send({ data });
   },
 
-  getAllLocations: (req, res) => {
-    res.status(200).send({
-      message: 'All locations',
-    });
+  getAllLocations: async (req, res) => {
+    const data = await findAll();
+    res.status(200).send({ data });
   },
 
   deleteLocation: (req, res) => {
