@@ -30,6 +30,24 @@ module.exports = {
 
       return message;
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      return false;
+    } finally {
+      if (client) await client.close();
+    }
+  },
+
+  async findOne(location) {
+    let client;
+    try {
+      client = new MongoClient(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+      await client.connect();
+      const db = client.db();
+
+      return db.collection('locations').findOne({ location });
+    } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
       return false;
     } finally {
