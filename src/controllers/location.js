@@ -1,9 +1,14 @@
+const locationsModel = require('../models/location');
+
 module.exports = {
-  createLocation: (req, res) => {
-    res.status(200).send({
-      data: { ...req.body },
-      message: 'Location added',
-    });
+  createLocation: async (req, res) => {
+    const { location, female, male } = req.body;
+
+    const response = await locationsModel.insertOne({ location, female, male });
+
+    if (!response) return res.status(500).send({ message: 'Something went wrong. Try again.' });
+
+    return res.status(200).send({ message: response });
   },
 
   getLocationById: (req, res) => {
