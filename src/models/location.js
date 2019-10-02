@@ -22,8 +22,6 @@ const findOne = async (location) => {
 const insertOne = async (data) => {
   let client;
   try {
-    const { location } = data;
-
     client = new MongoClient(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
     await client.connect();
     const db = client.db();
@@ -80,6 +78,24 @@ const updateLocation = async (location, data) => {
   }
 };
 
+const deleteLocation = async (location) => {
+  let client;
+  try {
+    client = new MongoClient(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db();
+
+    db.collection('locations').deleteOne({ location });
+    return true;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return false;
+  } finally {
+    if (client) await client.close();
+  }
+};
+
 module.exports = {
-  insertOne, findOne, findAll, updateLocation,
+  insertOne, findOne, findAll, updateLocation, deleteLocation,
 };

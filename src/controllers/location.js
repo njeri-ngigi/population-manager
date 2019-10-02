@@ -1,5 +1,5 @@
 const {
-  insertOne, findOne, findAll, updateLocation,
+  insertOne, findOne, findAll, updateLocation, deleteLocation,
 } = require('../models/location');
 
 module.exports = {
@@ -42,10 +42,15 @@ module.exports = {
     return res.status(200).send({ message: 'Location updated successfully', data });
   },
 
-  deleteLocation: (req, res) => {
-    const { id } = req.params;
-    res.status(200).send({
-      message: `Location ${id} delete successfully`,
+  deleteLocation: async (req, res) => {
+    const { name } = req.params;
+
+    const response = await deleteLocation(name);
+
+    if (!response) return res.status(500).send({ message: 'Something went wrong. Try again.' });
+
+    return res.status(200).send({
+      message: `Location (${name}) delete successfully`,
     });
   },
 };
