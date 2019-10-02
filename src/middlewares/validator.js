@@ -22,11 +22,15 @@ module.exports = {
     return next();
   },
 
-  validateUpdate: async (req, res, next) => {
+  validateLocationExists: async (req, res, next) => {
     const { name } = req.params;
     const locationFound = await findOne(name);
     if (!locationFound) return res.status(404).send({ message: 'Location not found' });
 
+    return next();
+  },
+
+  validateUpdate: async (req, res, next) => {
     const { male, female } = req.body;
     if (male) {
       if (!parseInt(male, 10) || male < 0) {
