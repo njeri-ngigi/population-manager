@@ -1,0 +1,27 @@
+[
+  {
+    "location": "sotik",
+    "female": "30",
+    "male": 2
+  },
+  {
+    "location": "thika",
+    "female": 1,
+    "male": 34
+  },
+  {
+      "location": "nyeri",
+      "female": 1,
+      "male": 3
+  },
+  {
+      "location": "nakuru",
+      "female": 45,
+      "male": 33
+  },
+  {
+      "location": "wajir",
+      "female": 45,
+      "male": 42
+  }
+]

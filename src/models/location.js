@@ -38,6 +38,25 @@ const insertOne = async (data) => {
   }
 };
 
+const insertMany = async (data) => {
+  let client;
+  try {
+    client = new MongoClient(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db();
+
+    await db.collection('locations').insertMany(data);
+
+    return 'Locations added successfully';
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return false;
+  } finally {
+    if (client) await client.close();
+  }
+};
+
 const findAll = async () => {
   let client;
   try {
@@ -97,5 +116,5 @@ const deleteLocation = async (location) => {
 };
 
 module.exports = {
-  insertOne, findOne, findAll, updateLocation, deleteLocation,
+  insertOne, insertMany, findOne, findAll, updateLocation, deleteLocation,
 };
