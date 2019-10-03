@@ -105,7 +105,18 @@ module.exports = {
     }
   },
 
-  addAllLocationsToFile: async () => {
+  addAllLocationsToFile: async (req, res) => {
+    const allLocations = await findAll();
+    const directoryName = `${global.appRoot}/tmp`;
+    const fileName = `${directoryName}/locations.txt`;
 
+    if (allLocations.length < 0) return res.status(200).send({ message: 'No locations found in the database.' });
+    if (!fs.existsSync(directoryName)) fs.mkdirSync(directoryName);
+    await fs.writeFile(fileName, JSON.stringify(allLocations), (error) => {
+      console.log(error);
+    });
+
+    const readStream = fs.createReadStream(fileName);
+    readStream.pipe(res);
   },
 };

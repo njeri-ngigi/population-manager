@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 
@@ -5,6 +6,8 @@ const { PORT } = require('./environment');
 const router = require('./routes');
 
 const app = express();
+
+global.appRoot = path.resolve(__dirname);
 
 app.use(express.json());
 app.use(fileUpload({
