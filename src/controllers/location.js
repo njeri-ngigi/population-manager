@@ -1,5 +1,6 @@
+const fs = require('fs');
 const {
-  insertOne, findOne, findAll, updateLocation, deleteLocation,
+  insertOne, insertMany, findOne, findAll, updateLocation, deleteLocation,
 } = require('../models/location');
 
 module.exports = {
@@ -52,5 +53,59 @@ module.exports = {
     return res.status(200).send({
       message: `Location (${name}) delete successfully`,
     });
+  },
+
+  createLocationsFromFile: async (req, res) => {
+    try {
+      if (!req.files || !req.files.locations) return res.status(400).send({ message: 'Please updload a file with the key "locations"' });
+
+      const { locations } = req.files;
+
+      if (!locations.data.toString().trim()) return res.status(400).send({ message: 'File seems empty. Data in the file should have the format \'[{location, female, male}]\'' });
+
+      const locationsData = JSON.parse(locations.data.toString());
+
+      if (!locationsData || Object.values(locationsData).length < 1) {
+        return res.status(400).send({ message: 'File seems empty. Data in the file should have the format \'[{location, female, male}]\'' });
+      }
+
+      const locationsArray = [];
+
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < locationsData.length; i++) {
+        const { location = '', female, male } = locationsData[i];
+        if (!location.trim()) return res.status(400).send({ message: 'location fields shouldn\'t be empty' });
+        if (female < 0 || male < 0) return res.status(400).send({ message: 'male and female fields should be integers greater than or equal to 0' });
+        // eslint-disable-next-line no-await-in-loop
+        const foundLocation = await findOne(location);
+        // eslint-disable-next-line no-continue
+        if (foundLocation) continue;
+        locationsArray.push({
+          location: location.trim(),
+          female: parseInt(female, 10),
+          male: parseInt(male, 10),
+        });
+      }
+
+      if (locationsArray.length < 1) return res.status(409).send({ message: 'Nothing changed. Locations already exist.' });
+
+      const response = await insertMany(locationsArray);
+
+      if (!response) return res.status(500).send({ message: 'Something went wromng. Try again.' });
+
+      return res.status(201).send({
+        message: response,
+        data: locationsArray,
+      });
+    } catch (error) {
+      if (error.name === 'SyntaxError') {
+        return res.status(400).send({ message: 'Data in the file should have the format \'[{location, female, male}]\'' });
+      }
+      return res.status(500).send({ message: 'Something went wromng. Try again.' });
+    }
+  },
+
+  addAllLocationsToFile: async () => {
+
   },
 };

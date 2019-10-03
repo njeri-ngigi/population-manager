@@ -1,10 +1,15 @@
 const express = require('express');
+const fileUpload = require('express-fileupload');
+
 const { PORT } = require('./environment');
 const router = require('./routes');
 
 const app = express();
 
 app.use(express.json());
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+}));
 app.use('/api/v1', router);
 
 app.listen(PORT, () => {
